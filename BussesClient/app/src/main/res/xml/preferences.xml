@@ -1,0 +1,24 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/pref_header_general"
+        android:key="pref_key_storage_settings">
+    <ListPreference
+        android:entries="@array/ROUTES"
+        android:entryValues="@array/ROUTES"
+        android:key="SELECTED_ROUTE"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_selected_default_rout"
+        android:summary="Esta es la ruta a la que este autobus pertenece"/>
+
+        <SwitchPreference
+            android:key="UPDATE_LOCATION_RUNNING"
+            android:summaryOn="@string/pref_summary_on_position_sender"
+            android:summaryOff="@string/pref_summary_off_position_sender"
+            android:title="@string/position_sender" />
+
+        <Preference android:title="Log out"
+            android:key="prefLogout" />
+
+    </PreferenceCategory>
+</PreferenceScreen>
