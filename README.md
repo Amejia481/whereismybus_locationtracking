@@ -1,5 +1,5 @@
 
-#  Log.i(TAG," :sunglasses: Where is My Bus Location Tracker :sunglasses: "); 
+#  Log.i(TAG," :sunglasses:Location Tracker :sunglasses: "); 
 
 This is the home for the source code of the android app, is written using java and [firebase][firebase_site] [BaaS][BaaS_info]. **We are open improvements**, if you like :heart_eyes: the app and  think that there is something  missing, or perhaps you want  improve something, just do it!. We are looking forward to hear from you.  
 
