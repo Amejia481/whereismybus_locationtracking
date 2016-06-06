@@ -1,5 +1,5 @@
 
-#  Log.i(TAG," :sunglasses: Where is My Buss Location Tracker :sunglasses: "); 
+#  Log.i(TAG," :sunglasses: Where is My Bus Location Tracker :sunglasses: "); 
 
 This is the home for the source code of the android app, is written using java and [firebase][firebase_site] [BaaS][BaaS_info]. **We are open improvements**, if you like :heart_eyes: the app and  think that there is something  missing, or perhaps you want  improve something, just do it!. We are looking forward to hear from you.  
 
@@ -51,7 +51,7 @@ If we notice that someone is very actives and has remarkable participation in th
  
 ###  :fire: Related Repository :fire:
 - [iOS App] [iOS_repo].
-- [Android Tracker][android_tracker_repo].
+- [Android app][android_repo].
 - [Web App] [web_app_repo].
  
 ## Contributing
@@ -75,7 +75,7 @@ If you need help with the repo or you have any question, you can ask to Arturo m
 [firebase_site]: <https://www.firebase.com/>
 [BaaS_info]: <https://en.wikipedia.org/wiki/Mobile_backend_as_a_service/>
 [iOS_repo]: <https://github.com/Amejia481/whereIsMyBusiOSClient>
-[android_tracker_repo]: <https://github.com/Amejia481/whereismybus_locationtracking>
+[android_repo]: <https://github.com/Amejia481/whereIsMyBusAndroidClient>
 [web_app_repo]: <https://github.com/AngelGarcia13/WhereIsMyBus>
 [performace_android]: <https://www.youtube.com/playlist?list=PLWz5rJ2EKKc9CBxr3BVjPTPoDPLdPIFCE>
 [best_practice]: <https://www.youtube.com/playlist?list=PLWz5rJ2EKKc-lJo_RGGXL2Psr8vVCTWjM>
