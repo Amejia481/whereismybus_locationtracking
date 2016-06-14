@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.MenuItem;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,6 +45,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     public static class PrefsFragment extends PreferenceFragment {
 
         private static final String TAG = PrefsFragment.class.getSimpleName() ;
+        private ListPreference mSelectedRoute;
+        private ChildEventListener mListenerRouteChanges;
+        private DatabaseReference myRef;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -51,8 +55,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
            FirebaseDatabase  database = FirebaseDatabase.getInstance();
-           final ListPreference mSelectedRoute = (ListPreference) findPreference("SELECTED_ROUTE");
-           final DatabaseReference myRef = database.getReference();
+           mSelectedRoute = (ListPreference) findPreference("SELECTED_ROUTE");
+           myRef = database.getReference();
            final SwitchPreference mPreLocationRunning = (SwitchPreference) findPreference("UPDATE_LOCATION_RUNNING");
 
 
@@ -62,7 +66,35 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             Preference button = findPreference("prefLogout");
             lastRoute =  PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("SELECTED_ROUTE",null);
             //Getting the routes from Firebase database
-            myRef.addListenerForSingleValueEvent(
+            mListenerRouteChanges =  new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    updateUIRoute(dataSnapshot);
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    updateUIRoute(dataSnapshot);
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    Log.i(TAG, "Log out user");
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    Log.i(TAG, "Log out user");
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.i(TAG, "Log out user");
+                }
+            };
+
+            myRef.addChildEventListener(mListenerRouteChanges);
+           /* myRef.addListenerForSingleValueEvent(
                     new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -90,6 +122,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                             Log.w(TAG, "getUser:onCancelled", databaseError.toException());
                         }
                     });
+*/
 
 
             button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -130,13 +163,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             //Listener for each time that the user switch on or off the
             //Location tracker
-            mPreLocationRunning.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            mPreLocationRunning.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
-                public boolean onPreferenceClick(Preference preference) {
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
                     ListPreference mSelectedRoute = (ListPreference) findPreference("SELECTED_ROUTE");
 
+                    boolean updateSwitch = true;
                     if (mSelectedRoute.getValue() != null) {
-                        if (mPreLocationRunning.isChecked()) {
+                        boolean isChecked = ((Boolean)newValue).booleanValue();
+                        if (isChecked) {
+
                             //Starting the  service for location tracker in a new thread
                             new Thread(new Runnable() {
                                 @Override
@@ -150,23 +186,50 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                             getActivity().stopService(new Intent(getActivity(), UpdateLocationService.class));
                         }
                     } else {
-
+                        updateSwitch = true;
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setMessage(R.string.message_select_route)
-                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        startActivity(new Intent(getActivity(), SettingsActivity.class));
-                                    }
-                                }).create().show();
+                        builder.setMessage(R.string.message_select_route) .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+
+                            }
+                        })    .create().show();
                     }
 
-                    return true;
+                    return updateSwitch;
+
                 }
             });
 
 
+
+
+
+        }
+        private void updateUIRoute(DataSnapshot dataSnapshot){
+            ArrayList<String> buses = new ArrayList<>();
+            HashMap<String, Object> map = (HashMap<String, Object>) dataSnapshot.getValue();
+            for (Map.Entry<String, Object> entry : map.entrySet())
+            {
+                if(!((Map<String ,Boolean>)entry.getValue()).get("active") || (lastRoute !=null && lastRoute.equals(entry.getKey())  )) {
+                    buses.add(entry.getKey());
+                }
+
+            }
+
+            CharSequence[] entries = buses.toArray(new String[buses.size()]);
+            CharSequence[] entryValues = buses.toArray(new String[buses.size()]);
+
+            //Updating UI
+            mSelectedRoute.setEntries(entries);
+            mSelectedRoute.setEntryValues(entryValues);
         }
 
+        @Override
+        public void onDestroy() {
+            super.onDestroy();
+            myRef.addChildEventListener(mListenerRouteChanges);
+        }
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

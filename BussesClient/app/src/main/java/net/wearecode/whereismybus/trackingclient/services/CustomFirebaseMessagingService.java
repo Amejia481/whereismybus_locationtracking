@@ -18,6 +18,7 @@ import net.wearecode.whereismybus.trackingclient.activities.SettingsActivity;
 public class CustomFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = CustomFirebaseMessagingService.class.getSimpleName() ;
+    private static final int ID_NOTIFICATION = 366 ;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -26,7 +27,7 @@ public class CustomFirebaseMessagingService extends FirebaseMessagingService {
         // message, here is where that should be initiated. See sendNotification method below.
         Log.d(TAG, "From: " + remoteMessage.getFrom());
         Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
-        
+
 
         // In this sample, we'll use the same text for the ticker and the expanded notification
         CharSequence text = remoteMessage.getNotification().getTitle();
@@ -46,7 +47,7 @@ public class CustomFirebaseMessagingService extends FirebaseMessagingService {
 
 
         // Send the notification.
-        ((NotificationManager)getSystemService(NOTIFICATION_SERVICE)).notify(366, notification);
+        ((NotificationManager)getSystemService(NOTIFICATION_SERVICE)).notify(ID_NOTIFICATION, notification);
 
         super.onMessageReceived(remoteMessage);
 
