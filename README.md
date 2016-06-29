@@ -66,12 +66,12 @@ If we notice that someone is very actives and has remarkable participation in th
 
 Check out all the super awesome contributors at [the contributors page](https://github.com/Amejia481/whereismybus_locationtracking/graphs/contributors). :sparkling_heart:
 
-### LICENSE
-This project is under the Attribution Assurance License (AAL). See the [License][License]
-
 ### Extra Help
 
 If you need help with the repo or you have any question, you can ask to Arturo mejia arturomejiamarmol@gmail.com or Angel Garcia angelrenegarcia13@gmail.com, repository moderators.
+
+### LICENSE
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
 
 :sparkles: **happy coding and have fun** :sparkles:.
 
